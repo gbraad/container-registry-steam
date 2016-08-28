@@ -1,0 +1,26 @@
+image: docker:git
+services:
+- docker:dind
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+
+
+clone_steamos:
+  script:
+    - docker pull tianon/steamos
+    - docker tag tianon/steamos:latest registry.gitlab.com/gbraad/steam:os-latest
+    - docker push registry.gitlab.com/gbraad/steam:os-latest
+  only:
+    - master
+  when: manual
+
+
+clone_steam_client:
+  script:
+    - docker pull tianon/steam
+    - docker tag tianon/steam:latest registry.gitlab.com/gbraad/steam:client-latest
+    - docker push registry.gitlab.com/gbraad/steam:client-latest
+  only:
+    - master
+  when: manual
